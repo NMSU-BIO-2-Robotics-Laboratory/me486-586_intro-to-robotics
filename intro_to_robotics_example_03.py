@@ -1,0 +1,98 @@
+#!/usr/bin/env python3
+# Software License Agreement (BSD License)
+#
+# Copyright (c) 2019, UFACTORY, Inc.
+# All rights reserved.
+#
+# Author: Vinman <vinman.wen@ufactory.cc> <vinman.cub@gmail.com>
+# Modified by Dr. Haghshenas-Jaryani, mahdihj@nmsu.edu, to be use in ME486/586 intro-to-robotics at NMSU
+"""
+Description: Move line(linear motion)
+"""
+
+import os
+import sys
+import time
+
+sys.path.append(os.path.join(os.path.dirname(__file__), '../../..'))
+
+from xarm.wrapper import XArmAPI
+
+
+#######################################################
+"""
+Just for test example
+"""
+if len(sys.argv) >= 2:
+    ip = sys.argv[1]
+else:
+    try:
+        from configparser import ConfigParser
+        parser = ConfigParser()
+        parser.read('robot.conf')
+        ip = parser.get('Lite6', 'ip')
+    except:
+        ip = input('Please input the xArm ip address:')
+        if not ip:
+            print('input error, exit')
+            sys.exit(1)
+########################################################
+
+# initialize the arm (enabling the motion, set mode to 0 (position control), set state to 0)
+arm = XArmAPI(ip)
+arm.motion_enable(enable=True)
+arm.set_mode(0)  # mode 0 = position control (check other modes in the documentation)
+arm.set_state(state=0)
+
+# send the arm to the home position
+arm.move_gohome(wait=True)
+
+# send the arm to the pose (x,y,z,roll,pitch,yaw) with speed of 50 mm/s
+arm.set_position(x=150, y=0, z=150, roll=-180, pitch=0, yaw=0, speed=50, wait=True)
+# get pose information
+print(arm.get_position(), arm.get_position(is_radian=True))
+# get the joint angles using inverse kinematics
+print("joint angles in DEG [j1, j2, j3, j4, j5, j6, j7 =0.0] = ")
+print(arm.get_inverse_kinematics([150, 0, 150, -180, 0, 0], input_is_radian=False, return_is_radian=False))
+arm.set_pause_time(5)
+
+
+# open the gripper
+arm.open_lite6_gripper()
+arm.set_pause_time(5)
+
+# send the arm to the pose (x,y,z,roll,pitch,yaw) with speed of 50 mm/s
+arm.set_position(x=250, y=200, z=250, roll=-180, pitch=0, yaw=0, speed=50, wait=True)
+print(arm.get_position(), arm.get_position(is_radian=True))
+
+# get the joint angles using inverse kinematics
+pose_tuple = arm.get_position()  # return a tuple in the following structure (code, [x, y, z, roll, pitch, yaw])
+pose = pose_tuple[1]  # getting the second element of pose_tuple, note the array index starts at [0]
+print("joint angles in DEG [j1, j2, j3, j4, j5, j6, j7=0.0] = ")
+print(arm.get_inverse_kinematics(pose, input_is_radian=False, return_is_radian=False))
+arm.set_pause_time(5)
+
+# close the gripper
+arm.close_lite6_gripper()
+arm.set_pause_time(5)
+# stop the gripper operation (it is not necessary for the vacuum)
+arm.stop_lite6_gripper()
+arm.set_pause_time(2)
+
+# send the arm to the pose (x(mm),y(mm),z(mm),roll(deg),pitch(deg),yaw(deg)) with speed of 50 mm/s
+arm.set_position(x=150, y=0, z=250, roll=-180, pitch=0, yaw=0, speed=50, wait=True)
+print(arm.get_position(), arm.get_position(is_radian=True))
+arm.set_pause_time(5)
+
+# get the joint angles using inverse kinematics
+_, pose = arm.get_position()  # getting the second element of the tuple
+print("joint angles in DEG [j1, j2, j3, j4, j5, j6, j7=0.0] = ")
+print(arm.get_inverse_kinematics(pose, input_is_radian=False, return_is_radian=False))
+arm.set_pause_time(5)
+
+# send the arm back to the home position
+arm.move_gohome(wait=True)
+print(arm.get_position())
+
+# disconnect the arm
+arm.disconnect()
