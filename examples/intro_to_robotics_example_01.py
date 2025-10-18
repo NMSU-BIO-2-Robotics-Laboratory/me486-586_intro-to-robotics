@@ -23,7 +23,7 @@ else:
     try:
         from configparser import ConfigParser
         parser = ConfigParser()
-        parser.read('../config/robot.conf')
+        parser.read('/config/robot.conf')
         ip = parser.get('Lite6', 'ip')
     except:
         ip = input('Please input the xArm ip address:')

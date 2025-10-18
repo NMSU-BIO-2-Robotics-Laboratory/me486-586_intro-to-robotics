@@ -10,7 +10,7 @@ def shape_detection_func():
     depth_frame, depth_intrinsics, color_intrinsics = image_capture()
 
     # reading image
-    img_org = cv2.imread('shapes.png')
+    img_org = cv2.imread('images/shapes.png')
     cv2.imshow('original',img_org)
 
     print("Shape of the image", img_org.shape)

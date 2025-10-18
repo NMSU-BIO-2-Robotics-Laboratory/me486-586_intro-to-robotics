@@ -3,7 +3,7 @@ import cv2
 import numpy as np
 
 # -- load the image.
-image = cv2.imread('../images/savedImage.jpg')  # 'shapes.png')
+image = cv2.imread('images/savedImage.jpg')  # 'shapes.png')
 
 
 # --Convert the image to HSV.

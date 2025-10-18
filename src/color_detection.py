@@ -3,7 +3,7 @@ import cv2
 import numpy as np
 
 # -- load the image.
-image = cv2.imread('../images/savedImage.jpg')  # 'shapes.png')
+image = cv2.imread('images/savedImage.jpg')  # 'shapes.png')
 
 
 # --Convert the image to HSV.
@@ -71,7 +71,7 @@ cv2.imshow('Detected Color', result)
 # cv2.waitKey(0)
 # cv2.destroyAllWindows()
 
-filename = 'detected_colors_mask.png'
+filename = 'images/detected_colors_mask.png'
 cv2.imwrite(filename, merged_mask)
 
 # -- Optional: Find contours.

@@ -7,8 +7,8 @@
 # First import the library
 import pyrealsense2 as rs
 import numpy as np
-from pupil_apriltags import Detector    # works with Windows
-# from dt_apriltags import Detector      # works with Linux
+# from pupil_apriltags import Detector    # works with Windows
+from dt_apriltags import Detector      # works with Linux
 import cv2
 
 
@@ -65,8 +65,8 @@ def rubikcube_detection_func(tag_size_in_m):
         depth_image = np.asanyarray(depth_frame.get_data())
         # Apriltag detection, 3D pose estimate
         color_image_apriltag = np.asanyarray(color_frame.get_data())
-        cv2.imwrite('../images/apriltag_test_realtime.jpg', color_image_apriltag)
-        image = cv2.imread('../images/apriltag_test_realtime.jpg', cv2.IMREAD_GRAYSCALE)
+        cv2.imwrite('/images/apriltag_test_realtime.jpg', color_image_apriltag)
+        image = cv2.imread('/images/apriltag_test_realtime.jpg', cv2.IMREAD_GRAYSCALE)
         camera_params = (fx, fy, cx, cy)
         tags = at_detector.detect(image, True, camera_params, tag_size_in_m) # unit is m
         print(tags)

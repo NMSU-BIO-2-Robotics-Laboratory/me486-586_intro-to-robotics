@@ -8,7 +8,7 @@ import pyrealsense2 as rs
 depth_frame, depth_intrinsics, color_intrinsics = image_capture()
 
 # reading image
-img_org = cv2.imread('../images/shapes.png')  #
+img_org = cv2.imread('images/shapes.png')  #
 # img_org = cv2.imread('detected_colors_mask.png')
 cv2.imshow('original',img_org)
 

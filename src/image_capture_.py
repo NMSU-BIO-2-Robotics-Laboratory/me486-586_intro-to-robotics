@@ -90,7 +90,7 @@ def image_capture():
             cv2.imshow('RealSense', color_image)
             cv2.waitKey(1)
             # Filename
-            filename = 'shapes.png'
+            filename = 'images/shapes.png'
 
             # Using cv2.imwrite() method
             # Saving the image
