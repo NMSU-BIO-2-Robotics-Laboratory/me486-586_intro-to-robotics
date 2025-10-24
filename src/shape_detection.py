@@ -1,14 +1,16 @@
 import cv2
 import numpy as np
 # from matplotlib import pyplot as plt
-import image_capture
+from image_capture_ import *
 import pyrealsense2 as rs
+
+path_to_images = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'images')
 
 # take an RGB image save it as shapes.png
 depth_frame, depth_intrinsics, color_intrinsics = image_capture()
 
 # reading image
-img_org = cv2.imread('images/shapes.png')  #
+img_org = cv2.imread(path_to_images + '/shapes.png')  #
 # img_org = cv2.imread('detected_colors_mask.png')
 cv2.imshow('original',img_org)
 

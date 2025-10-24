@@ -1,17 +1,18 @@
 import cv2
 import numpy as np
 # from matplotlib import pyplot as plt
-import image_capture
+from image_capture_ import *
 import pyrealsense2 as rs
 
+path_to_images = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'images')
 
 def shape_detection_func():
     # take an RGB image using realsense camera and save it as shapes.png
     depth_frame, depth_intrinsics, color_intrinsics = image_capture()
 
     # reading image
-    img_org = cv2.imread('images/shapes.png')
-    cv2.imshow('original',img_org)
+    img_org = cv2.imread(path_to_images + '/shapes.png')
+    cv2.imshow('original', img_org)
 
     print("Shape of the image", img_org.shape)
 

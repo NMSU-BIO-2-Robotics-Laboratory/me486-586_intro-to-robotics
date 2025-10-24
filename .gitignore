@@ -1,1 +1,2 @@
+# Ignore the cache directory
 src/__pycache__/

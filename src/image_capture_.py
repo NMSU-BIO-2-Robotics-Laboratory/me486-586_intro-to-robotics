@@ -106,3 +106,7 @@ def image_capture():
 
     return depth_frame, depth_intrinsics, color_intrinsics
 
+
+# test the code
+
+# depth_frame, depth_intrinsics, color_intrinsics = image_capture()
