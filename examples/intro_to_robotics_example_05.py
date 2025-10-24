@@ -12,7 +12,7 @@ from xarm.wrapper import XArmAPI
 import numpy as np
 
 sys.path.append(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'src'))
-import rubikcube_detection_func 
+from rubikcube_detection_func_ import *
 
 #######################################################
 path_to_config = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'config')

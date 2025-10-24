@@ -13,8 +13,8 @@ import numpy as np
 
 # add /src to python path
 sys.path.append(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'src'))
-import shape_detection_func 
-import rubikcube_detection_func 
+from shape_detection_func_ import * 
+from rubikcube_detection_func_ import * 
 
 
 
