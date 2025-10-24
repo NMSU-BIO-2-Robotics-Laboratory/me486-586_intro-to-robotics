@@ -5,25 +5,29 @@
 """
 Description: pick and place objects with different shapes
 """
-
+import os
 import sys
-from rubikcube_detection_ import *
 from spatialmath import SO3, SE3
-from shape_detection_func import *
 from xarm.wrapper import XArmAPI
+import numpy as np
+
+# add /src to python path
+sys.path.append(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'src'))
+import shape_detection_func 
+import rubikcube_detection_func 
+
 
 
 #######################################################
-"""
-Just for test example
-"""
+path_to_config = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'config')
+
 if len(sys.argv) >= 2:
     ip = sys.argv[1]
 else:
     try:
         from configparser import ConfigParser
         parser = ConfigParser()
-        parser.read('/config/robot.conf')
+        parser.read(path_to_config + '/robot.conf')
         ip = parser.get('Lite6', 'ip')
     except:
         ip = input('Please input the xArm ip address:')

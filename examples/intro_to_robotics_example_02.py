@@ -10,22 +10,21 @@
 """
 Description: Move Joint
 """
-
+import os
 import sys
 from xarm.wrapper import XArmAPI
 
 
 #######################################################
-"""
-Just for test example
-"""
+path_to_config = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'config')
+
 if len(sys.argv) >= 2:
     ip = sys.argv[1]
 else:
     try:
         from configparser import ConfigParser
         parser = ConfigParser()
-        parser.read('/config/robot.conf')
+        parser.read(path_to_config + '/robot.conf')
         ip = parser.get('Lite6', 'ip')
     except:
         ip = input('Please input the xArm ip address:')

@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
-from matplotlib import pyplot as plt
-from image_capture_ import *
+# from matplotlib import pyplot as plt
+import image_capture
 import pyrealsense2 as rs
 
 

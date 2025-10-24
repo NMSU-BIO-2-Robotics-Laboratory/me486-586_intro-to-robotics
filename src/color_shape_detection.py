@@ -1,9 +1,11 @@
 # -- Here is how to perform color detection in Python using OpenCV: Import necessary libraries.
+import os
 import cv2
 import numpy as np
 
+path_to_images = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'images')
 # -- load the image.
-image = cv2.imread('images/savedImage.jpg')  # 'shapes.png')
+image = cv2.imread(path_to_images + '/savedImage.jpg')  # 'shapes.png')
 
 
 # --Convert the image to HSV.
@@ -72,7 +74,7 @@ cv2.imshow('Detected Color', result)
 # cv2.waitKey(0)
 # cv2.destroyAllWindows()
 
-filename = '../images/detected_colors_mask.png'
+filename = path_to_images + '/detected_colors_mask.png'
 cv2.imwrite(filename, merged_mask)
 
 # -- Optional: Find contours.

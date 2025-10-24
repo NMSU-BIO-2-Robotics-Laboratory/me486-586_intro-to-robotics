@@ -4,12 +4,13 @@
 ###############################################
 ##      Open CV and Numpy integration        ##
 ###############################################
-
+import os
 import pyrealsense2 as rs
 import numpy as np
 import cv2
-from matplotlib import pyplot as plt
+# from matplotlib import pyplot as plt
 
+path_to_images = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'images')
 
 def image_capture():
 
@@ -90,7 +91,7 @@ def image_capture():
             cv2.imshow('RealSense', color_image)
             cv2.waitKey(1)
             # Filename
-            filename = 'images/shapes.png'
+            filename = path_to_images + '/shapes.png'
 
             # Using cv2.imwrite() method
             # Saving the image
