@@ -62,11 +62,11 @@ arm.set_state(state=0)
 arm.move_gohome(wait=True)
 
 # -- send the arm to the initial position
-arm.set_position(x=150, y=0, z=150, roll=-180, pitch=0, yaw=0, speed=50, wait=True)
+arm.set_position(x=250, y=0, z=250, roll=-180, pitch=0, yaw=0, speed=50, wait=True)
 # get pose information
 print(arm.get_position(), arm.get_position(is_radian=True))
 print(arm.get_servo_angle(), arm.get_servo_angle(is_radian=True))
-arm.set_pause_time(5)
+arm.set_pause_time(2)
 
 wiggle()
 # arm.set_position(x= 214, y=-313, z=199, roll=-180, pitch=0, yaw=0, speed=50, wait=True)
@@ -85,7 +85,7 @@ wiggle()
 # arm.set_pause_time(5)
 
 # -- show me your tag
-arm.set_position(x=400, y=0, z=150, roll=-180, pitch=-90, yaw=0, speed=50, wait=True)
+arm.set_position(x=350, y=0, z=150, roll=-180, pitch=-90, yaw=0, speed=50, wait=True)
 print(arm.get_position(), arm.get_position(is_radian=True))
 _, tcp_pose_b_t = arm.get_position()
 tcp_p_b_t = np.array([tcp_pose_b_t[0:3]])  # the bracket is the trick
@@ -118,9 +118,9 @@ print(T_b_t)
 # --The x-axis is to the right in the image taken by the camera, and y is down.
 # --The tag's coordinate frame is centered at the center of the tag.
 # --From the viewer's perspective, the x-axis is to the right, y-axis down, and z-axis is into the tag.
-x_off = 26.1  # roughly measured by a ruler
+x_off = 26.9 # roughly measured by a ruler for vacuum is 26.1 for gripper is 26.9
 y_off = 0
-z_off = -35.5  # for gripper = -48.3 mm and for vacuum = -35.5
+z_off = -56.4 # for gripper = -56.4 mm and for vacuum = -35.5
 off_t_a = np.array([x_off, y_off, z_off])
 R_t_a = SO3.RPY(90, -90, 0, unit='deg', order='xyz')
 T_t_a = SE3.Rt(R_t_a, off_t_a.T)  # [[0, 0, -1, x_off],[1, 0, 0, y_off],[0, -1, 0, z_off],[0, 0, 0, 1]]
@@ -131,6 +131,7 @@ print(T_b_c)
 arm.set_pause_time(5)
 
 # -- send the arm to the initial position
+# arm.set_position(x=150, y=0, z=150, roll=-180, pitch=0, yaw=0, speed=50, wait=True)
 arm.set_position(x=150, y=0, z=150, roll=-180, pitch=0, yaw=0, speed=50, wait=True)
 # -- get pose information
 print(arm.get_position(), arm.get_position(is_radian=True))
@@ -164,31 +165,48 @@ for shape in shapes:
     arm.set_pause_time(2)
     # -- send the arm to the shape
     print("Shape centroid position in the base frame =", T_b_shape.x, T_b_shape.y, T_b_shape.z)
-    arm.set_position(x=T_b_shape.x , y=T_b_shape.y + 8, z=T_b_shape.z + 20, roll=-180, pitch=0, yaw=0, speed=50, wait=True)
+    arm.set_position(x=T_b_shape.x -10, y=T_b_shape.y , z=T_b_shape.z + 50, roll=-180, pitch=0, yaw=-90, speed=50, wait=True)
     arm.set_pause_time(2)
-    arm.set_position(x=T_b_shape.x , y=T_b_shape.y + 8, z=T_b_shape.z - 5, roll=-180, pitch=0, yaw=0, speed=50, wait=True)
+    arm.set_position(x=T_b_shape.x -10, y=T_b_shape.y, z=T_b_shape.z -10, roll=-180, pitch=0, yaw=-90, speed=50, wait=True)
+    arm.set_pause_time(2)
+    arm.close_lite6_gripper()
+    arm.set_pause_time(2)
+    # arm.set_position(x=T_b_shape.x , y=T_b_shape.y + 8, z=T_b_shape.z - 5, roll=-180, pitch=0, yaw=0, speed=50, wait=True)
+    arm.set_position(x=250, y=0, z=250, roll=-180, pitch=0, yaw=0, speed=50, wait=True)
     # print(arm.get_servo_angle(), arm.get_servo_angle(is_radian=True))
     arm.set_pause_time(5)
     # # -- close the gripper
     # arm.close_lite6_gripper()
     # arm.set_pause_time(5)
     # -- send the arm back up
-    arm.set_position(z=+150, relative=True, wait=True)  # relative to the base frame
+    # arm.set_position(z=+150, relative=True, wait=True)  # relative to the base frame
     # -- send the arm to the goal pose to place the shap into the box
     target_pose = shape[2]
-    arm.set_position(x=target_pose[0], y=target_pose[1], z=target_pose[2] + 80, roll=-180, pitch=0, yaw=0, speed=50, wait=True)
+    # # arm.set_position(x=target_pose[0], y=target_pose[1], z=target_pose[2] + 80, roll=-180, pitch=0, yaw=0, speed=50, wait=True)
+    arm.set_position(x=target_pose[0]+3 , y=target_pose[1]+50, z=target_pose[2], roll=90, pitch=-90, yaw=0, speed=50, wait=True)
     arm.set_pause_time(2)
-    arm.set_position(x=target_pose[0], y=target_pose[1], z=target_pose[2], roll=-180, pitch=0, yaw=0, speed=10, wait=True)
-    arm.set_pause_time(2)
-    # print(arm.get_servo_angle(), arm.get_servo_angle(is_radian=True))
-    wiggle()
-    # -- close the gripper
-    arm.close_lite6_gripper()
-    arm.set_pause_time(2)
-    arm.set_position(z=+50, relative=True, speed=50, wait=True)  # relative to the base frame
-    arm.set_pause_time(2)
-    arm.set_position(y=+100, relative=True, speed=50, wait=True)  # relative to the base frame
+    arm.set_tool_position(yaw=+90, relative=True, speed=50, wait=True)  
     arm.set_pause_time(5)
+    # wiggle()
+    arm.set_pause_time(2)
+    # arm.set_position(x=target_pose[0], y=target_pose[1]+2, z=target_pose[2], roll=90, pitch=-90, yaw=0, speed=10, wait=True)
+    arm.set_position(y=-51, relative=True, speed=30, wait=True)
+    arm.set_pause_time(5)
+    # arm.set_position(y=+50, relative=True, speed=50, wait=True)
+    # arm.set_pause_time(5)
+    # print(arm.get_servo_angle(), arm.get_servo_angle(is_radian=True))
+   
+    # -- close the gripper
+    arm.open_lite6_gripper()
+    arm.set_pause_time(2)
+    arm.set_position(y=+50, relative=True, speed=30, wait=True) # relative to the base frame
+    arm.set_pause_time(2)
+    arm.set_position(x=+50, relative=True, speed=30, wait=True) 
+    arm.set_pause_time(2)
+    arm.set_position(x=250, y=0, z=250, roll=-180, pitch=0, yaw=0, speed=50, wait=True)
+    arm.set_pause_time(2)
+    # arm.set_position(y=+100, relative=True, speed=50, wait=True)  # relative to the base frame
+    # arm.set_pause_time(5)
 
 # # -- april tag detection on the Rubik's cube(s)
 # tags_point_xyz_m, tags_cube = rubikcube_detection_func(0.017)
@@ -232,6 +250,7 @@ for shape in shapes:
 # -- send the arm back to the home position
 arm.move_gohome(wait=True)
 print(arm.get_position())
+arm.stop_lite6_gripper()
 
 # -- disconnect the arm
 arm.disconnect()

@@ -12,14 +12,15 @@ def shape_detection_func():
 
     # reading image
     img_org = cv2.imread(path_to_images + '/shapes.png')
+    # img_org = cv2.imread(path_to_images + '/goldenzoe2.png')
     cv2.imshow('original', img_org)
 
     print("Shape of the image", img_org.shape)
 
     # [rows, columns]
-    img = img_org[125:370, 310:639]  # [ymin:ymax, xmin:xmax] [0:479, 0:639]
-    y_min_offset = 125   # y_min
-    x_min_offset = 310  # x_min
+    img = img_org[130:370, 100:320]  # [ymin:ymax, xmin:xmax] [0:479, 0:639]
+    y_min_offset = 130   # y_min
+    x_min_offset = 100  # x_min
 
     cv2.imshow('cropped', img)
     cv2.waitKey(0)
@@ -35,7 +36,7 @@ def shape_detection_func():
     #cv2.waitKey(0)
 
     # setting threshold of gray image
-    _, threshold = cv2.threshold(gray, 105, 255, cv2.THRESH_BINARY)
+    _, threshold = cv2.threshold(gray, 95, 255, cv2.THRESH_BINARY)
     cv2.imshow('threshold',threshold)
 
     # using a findContours() function
@@ -58,7 +59,7 @@ def shape_detection_func():
 
         # cv2.approxPloyDP() function to approximate the shape
         approx = cv2.approxPolyDP(
-            contour, 0.035 * cv2.arcLength(contour, True), True)
+            contour, 0.0213 * cv2.arcLength(contour, True), True)
         print(len(approx))
 
         # using drawContours() function
@@ -73,45 +74,57 @@ def shape_detection_func():
         print("x, y = ", x + x_min_offset, y + y_min_offset)
 
         depth_xy = depth_frame.get_distance(int(x + x_min_offset), int(y + y_min_offset))
-        shape_point_xyz = np.array(rs.rs2_deproject_pixel_to_point(color_intrinsics, [int(x + x_min_offset + 20), int(y + y_min_offset)], depth_xy))
+        shape_point_xyz = np.array(rs.rs2_deproject_pixel_to_point(color_intrinsics, [int(x + x_min_offset), int(y + y_min_offset)], depth_xy))
         shape_point_xyz_mm = np.dot(shape_point_xyz, 1000)
         print(np.dot(shape_point_xyz, 1000))
 
         # putting shape name at center of each shape
         if len(approx) == 3:
             cv2.putText(img, 'Triangle', (x, y),
-                        cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 2)
+                        cv2.FONT_HERSHEY_SIMPLEX, 0.6, (225, 255, 255), 2)
             cv2.drawMarker(img, (x, y), (0, 255, 255), cv2.MARKER_SQUARE, 5,
                            2, cv2.LINE_AA)
             shape_name = "Triangle"
-            shape_goal_pose = np.array([253, -199, 165])
+            shape_goal_pose = np.array([214, -313, 166])
         elif len(approx) == 4:
             cv2.putText(img, 'Quadrilateral', (x, y),
                         cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 2)
             cv2.drawMarker(img, (x, y), (0, 255, 255), cv2.MARKER_SQUARE, 5,
                            2, cv2.LINE_AA)
             shape_name = "Square"  # "Quadrilateral"
-            shape_goal_pose = np.array([203, -232, 165])
+            # shape_goal_pose = np.array([163, -283, 166])
+            shape_goal_pose = np.array([223.5, -246.2, 96.7])
         elif len(approx) == 5:
             cv2.putText(img, 'Pentagon', (x, y),
                         cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 2)
+            cv2.drawMarker(img, (x, y), (0, 255, 255), cv2.MARKER_SQUARE, 5,
+                           2, cv2.LINE_AA)
             shape_name = "Pentagon"
             shape_goal_pose = np.array([253, -199, 170])
         elif len(approx) == 6:
             cv2.putText(img, 'Hexagon', (x, y),
                         cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 2)
+            cv2.drawMarker(img, (x, y), (0, 255, 255), cv2.MARKER_SQUARE, 5,
+                           2, cv2.LINE_AA)
             shape_name = "Hexagon"
             shape_goal_pose = np.array([253, -199, 165])
         elif len(approx) == 8:
             cv2.putText(img, 'Octagon', (x, y),
                         cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 2)
+            cv2.drawMarker(img, (x, y), (0, 255, 255), cv2.MARKER_SQUARE, 5,
+                           2, cv2.LINE_AA)
             shape_name = "Octagon"
-            shape_goal_pose = np.array([253, -199, 170])
+            shape_goal_pose = np.array([164.8, -246.2, 96.7])
         else:
             cv2.putText(img, 'Ellipse', (x, y),
                         cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 2)
+            cv2.drawMarker(img, (x, y), (0, 255, 255), cv2.MARKER_SQUARE, 5,
+                           2, cv2.LINE_AA)
             shape_name = "Ellipse"
-            shape_goal_pose = np.array([253, -199, 170])
+            shape_goal_pose = np.array([163, -341, 166])
+            
+
+
 
         shapes.append((shape_name,shape_point_xyz_mm, shape_goal_pose))  # generate a tuple of name and location
         # displaying the image after drawing contours
@@ -126,7 +139,9 @@ def shape_detection_func():
 
 
 # shapes = shape_detection_func()
-#
+
 # for shape in shapes:
 #     print("Shape Name=", shape[0])
 #     print("Shape centroid position =", shape[1])
+
+

@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python3;
 # Software License Agreement (BSD License)
 # Modified by Dr. Haghshenas-Jaryani, mahdihj@nmsu.edu, to be use in ME486/586 intro-to-robotics at NMSU
 """
@@ -8,6 +8,7 @@ Description: pick and place Rubik's cubes (using spatialmath)
 import os
 import sys
 from spatialmath import SO3, SE3
+from spatialmath.base import tr2eul, tr2rpy
 from xarm.wrapper import XArmAPI
 import numpy as np
 
@@ -45,7 +46,7 @@ arm.move_gohome(wait=True)
 arm.set_position(x=150, y=0, z=150, roll=-180, pitch=0, yaw=0, speed=50, wait=True)
 # get pose information
 print(arm.get_position(), arm.get_position(is_radian=True))
-arm.set_pause_time(5)
+arm.set_pause_time(2)
 
 # -- show me your tag (robot shows the tag to the camera)
 arm.set_position(x=350, y=0, z=150, roll=-180, pitch=-90, yaw=0, speed=50, wait=True)
@@ -55,7 +56,7 @@ tcp_p_b_t = np.array([tcp_pose_b_t[0:3]])  # the bracket is the trick
 tcp_euler_b_t = np.array(tcp_pose_b_t[3:6])
 print(tcp_euler_b_t)
 print(tcp_p_b_t)
-arm.set_pause_time(10)
+arm.set_pause_time(2)
 
 # -- april tag detection on the robot arm's wrist and pose estimation (rotation + position)
 apriltag_point_xyz_m, tags = rubikcube_detection_func(0.017)
@@ -80,9 +81,9 @@ print(T_b_t)
 # --The x-axis is to the right in the image taken by the camera, and y is down.
 # --The tag's coordinate frame is centered at the center of the tag.
 # --From the viewer's perspective, the x-axis is to the right, y-axis down, and z-axis is into the tag.
-x_off = 26.1  # roughly measured by a ruler
+x_off = 26.9 # roughly measured by a ruler for vacuum is 26.1 for gripper is 26.9
 y_off = 0
-z_off = -35.5  # for gripper = -48.3 mm and for vacuum = -35.5
+z_off = -56.4  # for gripper = -56.4 mm and for vacuum = -35.5
 off_t_a = np.array([x_off, y_off, z_off])
 R_t_a = SO3.RPY(90, -90, 0, unit='deg', order='xyz')
 T_t_a = SE3.Rt(R_t_a, off_t_a.T)
@@ -95,12 +96,13 @@ arm.set_pause_time(5)
 arm.set_position(x=150, y=0, z=150, roll=-180, pitch=0, yaw=0, speed=50, wait=True)
 # -- get pose information
 print(arm.get_position(), arm.get_position(is_radian=True))
-arm.set_pause_time(10)
+arm.set_pause_time(5)
 
 
 # -- april tag detection on the Rubik's cube(s)
 tags_point_xyz_m, tags_cube = rubikcube_detection_func(0.017)  # tag size = 17 mm
-i = 0  # tags index set to zero
+i = 0  # tags index set to zero 
+j = 0
 # -- find their pose
 for tag in tags_cube:
     pose_rot = np.array(tag.pose_R)
@@ -109,12 +111,32 @@ for tag in tags_cube:
     T_c_cube = SE3.Rt(pose_rot, pose_trans)
     T_b_cube = T_b_c * T_c_cube
     print(T_b_cube.x, T_b_cube.y, T_b_cube.z)  # x, y,and z elements of the position vector
-    arm.set_pause_time(5)
+    print(tr2rpy(T_b_cube.R,unit='deg'))
+    angle = tr2rpy(T_b_cube.R,unit='deg')
+    arm.set_position(x=T_b_cube.x-2.5, y=T_b_cube.y +5, z=T_b_cube.z+50, roll=-180, pitch=0, yaw=-90+angle[2], speed=50, wait=True)   # -- goes to the cube
+    print(arm.get_position(), arm.get_position(is_radian=True))
+    arm.open_lite6_gripper()
+    arm.set_pause_time(2)
+    arm.set_position(x=T_b_cube.x-2.5, y=T_b_cube.y +5, z=T_b_cube.z-13, roll=-180, pitch=0, yaw=-90+angle[2], speed=50, wait=True)   # -- pick up cube
+    print(arm.get_position(), arm.get_position(is_radian=True))
+    arm.set_pause_time(1)
+    arm.close_lite6_gripper()
+    arm.set_pause_time(1)
+    arm.set_position(x=T_b_cube.x-2.5, y=T_b_cube.y, z=T_b_cube.z+50, roll=-180, pitch=0, yaw=0, speed=50, wait=True)
+    arm.set_pause_time(1)
+    arm.set_position(x=95, y=-170, z=30*(i+1)+50, roll=-180, pitch=0, yaw=0, speed=50, wait=True)
+    arm.set_pause_time(1)
+    arm.set_position(x=95, y=-170, z=30*(i+1)-10, roll=-180, pitch=0, yaw=0, speed=50, wait=True)
+    arm.set_pause_time(1)
+    arm.open_lite6_gripper()
+    arm.set_pause_time(1)
+    arm.set_position(x=95, y=-170, z=30*(i+1)+50, roll=-180, pitch=0, yaw=0, speed=50, wait=True)
+    arm.set_pause_time(1)
     i = i + 1  # tags index increase by one
 
 # -- send the arm back to the home position
 arm.move_gohome(wait=True)
 print(arm.get_position())
-
+arm.stop_lite6_gripper()
 # -- disconnect the arm
 arm.disconnect()

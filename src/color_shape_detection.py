@@ -2,10 +2,25 @@
 import os
 import cv2
 import numpy as np
+from image_capture_ import *
+import pyrealsense2 as rs
 
 path_to_images = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'images')
+
+# take an RGB image using realsense camera and save it as shapes.png
+depth_frame, depth_intrinsics, color_intrinsics = image_capture()
+
 # -- load the image.
-image = cv2.imread(path_to_images + '/savedImage.jpg')  # 'shapes.png')
+image = cv2.imread(path_to_images + '/shapes.png')  # 'shapes.png')
+
+ # [rows, columns]
+image = image[130:370, 100:320]  # [ymin:ymax, xmin:xmax] [0:479, 0:639]
+y_min_offset = 130  # y_min
+x_min_offset = 100  # x_min
+
+cv2.imshow('cropped', image)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
 
 
 # --Convert the image to HSV.

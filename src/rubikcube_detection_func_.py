@@ -115,7 +115,7 @@ def rubikcube_detection_func(tag_size_in_m):
         # points = pc.calculate(depth_frame)
         # pc.map_to(color_frame)
         if not depth_frame: continue
-
+    # pipeline.stop()
     return tags_point_xyz, tags
 
 # test the code (comment it when you want to use it in the robot arm's code)

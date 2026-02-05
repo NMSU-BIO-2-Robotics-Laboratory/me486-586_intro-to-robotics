@@ -35,7 +35,7 @@ cv2.imshow('gray', gray)
 #cv2.waitKey(0)
 
 # setting threshold of gray image
-_, threshold = cv2.threshold(gray, 100, 255, cv2.THRESH_BINARY)
+_, threshold = cv2.threshold(gray, 130, 255, cv2.THRESH_BINARY)
 cv2.imshow('threshold', threshold)
 
 # using a findContours() function
@@ -57,7 +57,7 @@ for contour in contours:
 
     # cv2.approxPloyDP() function to approximate the shape
     approx = cv2.approxPolyDP(
-        contour, 0.041 * cv2.arcLength(contour, True), True)
+        contour, 0.0250 * cv2.arcLength(contour, True), True)
     print(len(approx))
 
     # using drawContours() function
@@ -97,8 +97,8 @@ for contour in contours:
                     cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 2)
 
     else:
-        cv2.putText(img, 'ellipse', (x, y),
-                    cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 2)
+        cv2.putText(img, "Oval", (x, y),
+                    cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 2)    
 
     # displaying the image after drawing contours
     cv2.imshow('shapes', img)
