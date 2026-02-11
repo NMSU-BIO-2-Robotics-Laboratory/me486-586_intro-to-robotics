@@ -165,14 +165,14 @@ for shape in shapes:
     arm.set_pause_time(2)
     # -- send the arm to the shape
     print("Shape centroid position in the base frame =", T_b_shape.x, T_b_shape.y, T_b_shape.z)
-    arm.set_position(x=T_b_shape.x -10, y=T_b_shape.y , z=T_b_shape.z + 50, roll=-180, pitch=0, yaw=-90, speed=50, wait=True)
+    arm.set_position(x=T_b_shape.x -10, y=T_b_shape.y -3, z=T_b_shape.z + 50, roll=-180, pitch=0, yaw=-90, speed=50, wait=True) #-- Goes to the shape
     arm.set_pause_time(2)
-    arm.set_position(x=T_b_shape.x -10, y=T_b_shape.y, z=T_b_shape.z -10, roll=-180, pitch=0, yaw=-90, speed=50, wait=True)
+    arm.set_position(x=T_b_shape.x -10, y=T_b_shape.y-3, z=T_b_shape.z -10, roll=-180, pitch=0, yaw=-90, speed=50, wait=True)
     arm.set_pause_time(2)
     arm.close_lite6_gripper()
     arm.set_pause_time(2)
     # arm.set_position(x=T_b_shape.x , y=T_b_shape.y + 8, z=T_b_shape.z - 5, roll=-180, pitch=0, yaw=0, speed=50, wait=True)
-    arm.set_position(x=250, y=0, z=250, roll=-180, pitch=0, yaw=0, speed=50, wait=True)
+    arm.set_position(x=250, y=0, z=250, roll=-180, pitch=0, yaw=0, speed=50, wait=True) #-- Picks up the cube
     # print(arm.get_servo_angle(), arm.get_servo_angle(is_radian=True))
     arm.set_pause_time(5)
     # # -- close the gripper
@@ -183,14 +183,14 @@ for shape in shapes:
     # -- send the arm to the goal pose to place the shap into the box
     target_pose = shape[2]
     # # arm.set_position(x=target_pose[0], y=target_pose[1], z=target_pose[2] + 80, roll=-180, pitch=0, yaw=0, speed=50, wait=True)
-    arm.set_position(x=target_pose[0]+3 , y=target_pose[1]+50, z=target_pose[2], roll=90, pitch=-90, yaw=0, speed=50, wait=True)
+    arm.set_position(x=target_pose[0]+3 , y=target_pose[1]+50, z=target_pose[2], roll=90, pitch=-90, yaw=0, speed=50, wait=True) 
     arm.set_pause_time(2)
-    arm.set_tool_position(yaw=+90, relative=True, speed=50, wait=True)  
+    arm.set_tool_position(yaw=+90, relative=True, speed=50, wait=True)  #-- Rotates the shape 
     arm.set_pause_time(5)
     # wiggle()
     arm.set_pause_time(2)
     # arm.set_position(x=target_pose[0], y=target_pose[1]+2, z=target_pose[2], roll=90, pitch=-90, yaw=0, speed=10, wait=True)
-    arm.set_position(y=-51, relative=True, speed=30, wait=True)
+    arm.set_position(y=-48, relative=True, speed=20, wait=True) #-- Shape is being pushed inside 
     arm.set_pause_time(5)
     # arm.set_position(y=+50, relative=True, speed=50, wait=True)
     # arm.set_pause_time(5)
@@ -199,11 +199,17 @@ for shape in shapes:
     # -- close the gripper
     arm.open_lite6_gripper()
     arm.set_pause_time(2)
-    arm.set_position(y=+50, relative=True, speed=30, wait=True) # relative to the base frame
-    arm.set_pause_time(2)
-    arm.set_position(x=+50, relative=True, speed=30, wait=True) 
-    arm.set_pause_time(2)
-    arm.set_position(x=250, y=0, z=250, roll=-180, pitch=0, yaw=0, speed=50, wait=True)
+    arm.set_position(y=+50, relative=True, speed=20, wait=True) # relative to the base frame
+    arm.set_pause_time(3)
+    arm.close_lite6_gripper() #-- Gripper closes 
+    arm.set_pause_time(3)
+    arm.set_position(y=-53, relative=True, speed=20, wait=True) #-- Pushes the shape inside the box 
+    arm.set_pause_time(3)
+    arm.set_position(y=+59, relative=True, speed=20, wait=True)
+    arm.set_pause_time(3)
+    arm.set_position(x=+60, relative=True, speed=20, wait=True) 
+    arm.set_pause_time(3)
+    arm.set_position(x=250, y=0, z=250, roll=-180, pitch=0, yaw=0, speed=50, wait=True)  # -- Goes back to intitial position 
     arm.set_pause_time(2)
     # arm.set_position(y=+100, relative=True, speed=50, wait=True)  # relative to the base frame
     # arm.set_pause_time(5)

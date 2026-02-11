@@ -32,6 +32,8 @@ def rubikcube_detection_func(tag_size_in_m):
     profile = pipeline.get_active_profile()
     depth_profile = rs.video_stream_profile(profile.get_stream(rs.stream.depth))
     depth_intrinsics = depth_profile.get_intrinsics()
+    color_profile = rs.video_stream_profile(profile.get_stream(rs.stream.color))
+    color_intrinsics = color_profile.get_intrinsics()
 
     w, h = depth_intrinsics.width, depth_intrinsics.height
     fx, fy, cx, cy = depth_intrinsics.fx, depth_intrinsics.fy, depth_intrinsics.ppx, depth_intrinsics.ppy

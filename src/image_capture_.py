@@ -52,7 +52,7 @@ def image_capture():
     align = rs.align(align_to)
 
     try:
-        for _ in range(15):
+        for _ in range(16):
 
             # Wait for a coherent pair of frames: depth and color
             frames = pipeline.wait_for_frames()
